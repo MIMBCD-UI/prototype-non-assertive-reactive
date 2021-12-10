@@ -1,6 +1,10 @@
 // Assistant Switch 
 function assistantSwitch() {
     
+    if ($("#explainBtn").data("executing")){
+        $("#switchInput").prop("checked",true);
+        return;
+    }
 
     var assistant_block_width = $('.assistant_block').width();
     if (assistant_block_width < 200) {
