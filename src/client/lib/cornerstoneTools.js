@@ -162,7 +162,15 @@ if (typeof cornerstoneTools === 'undefined') {
             lastPoints = cornerstoneTools.copyPoints(currentPoints);
 
             if (list_of_cs.length != 0) {
-                explain_assistant_rerult(false);
+                var toolData = cornerstoneTools.getToolState(eventData.element, 'stack');
+                if (toolData === undefined || toolData.data === undefined || toolData.data.length === 0) {
+                    return;
+                }
+                var stackData = toolData.data[0];
+                if (stackData.imageIds.length > 1)
+                    explain_assistant_rerult(null, true);
+                else
+                    explain_assistant_rerult(false);
             }
 
             // prevent left click selection of DOM elements
@@ -6664,12 +6672,23 @@ Display scroll progress bar across bottom of image.
             cornerstoneTools.scroll(element, imageIdIndexOffset);
         }
 
+        if (stackData.imageIds.length > 1)
+            explain_assistant_rerult(null, true);
+
         return false; // false = cases jquery to preventDefault() and stopPropagation() this event
     }
 
     function mouseWheelCallback(e, eventData) {
         var images = -eventData.direction;
         cornerstoneTools.scroll(eventData.element, images);
+
+        var toolData = cornerstoneTools.getToolState(eventData.element, 'stack');
+        if (toolData === undefined || toolData.data === undefined || toolData.data.length === 0) {
+            return;
+        }
+        var stackData = toolData.data[0];
+        if (stackData.imageIds.length > 1)
+            explain_assistant_rerult(null, true);
     }
 
     function onDrag(e, eventData) {
